@@ -1,8 +1,8 @@
 FROM alpine:3.4
 
-MAINTAINER Huang Rui <vowstar@gmail.com>
+MAINTAINER fish <fish@usto.re>
 
-ENV EMQ_VERSION=v2.0.5
+#ENV EMQ_VERSION=v2.0.5
 
 ADD ./start.sh /start.sh
 
@@ -67,10 +67,11 @@ RUN apk --no-cache add \
         git \
         make \
         perl \
-    && git clone -b ${EMQ_VERSION} https://github.com/emqtt/emq-relx.git /emqttd \
+	socat \
+    && git clone https://github.com/casevictor/emqttd.git /emqttd \
     && cd /emqttd \
-    && make \
-    && mkdir /opt && mv /emqttd/_rel/emqttd /opt/emqttd \
+    && make && make dist \
+    && mkdir /opt && mv /emqttd/rel/emqttd /opt/emqttd \
     && cd / && rm -rf /emqttd \
     && mv /start.sh /opt/emqttd/start.sh \
     && chmod +x /opt/emqttd/start.sh \
